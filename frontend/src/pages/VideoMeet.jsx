@@ -281,7 +281,9 @@ export default function VideoMeetComponent() {
             socketRef.current.emit('join-call', window.location.href)
             socketIdRef.current = socketRef.current.id
 
-            socketRef.current.on('chat-message', addMessage)
+            socketRef.current.on('chat-message', (data, sender, socketIdSender) => {
+                addMessageRef.current(data, sender, socketIdSender);
+            })
 
             socketRef.current.on('user-left', (id) => {
                 setVideos((videos) => videos.filter((video) => video.socketId !== id))
@@ -418,9 +420,12 @@ export default function VideoMeetComponent() {
         setMessage(e.target.value);
     }
 
+    // Use a ref so connectToSocketServer can always access the latest version
+    // without stale-closure / temporal-dead-zone issues
+    const addMessageRef = useRef(null);
+
     const addMessage = (data, sender, socketIdSender) => {
         // Skip live echo of own messages (we add locally in sendMessage)
-        // But allow replayed history messages even from self — identified by username
         const isLiveEcho = socketIdSender === socketIdRef.current;
         if (isLiveEcho) return;
         const fromMe = sender === myUsernameRef.current;
@@ -431,7 +436,8 @@ export default function VideoMeetComponent() {
         if (!fromMe) setNewMessages((prevNewMessages) => prevNewMessages + 1);
     };
 
-
+    // Keep ref in sync so socket listener always calls latest closure
+    addMessageRef.current = addMessage;
 
     let sendMessage = () => {
         if (!message.trim()) return;
@@ -442,7 +448,7 @@ export default function VideoMeetComponent() {
         setMessage("");
     }
 
-    
+
     let connect = () => {
         const name = username.trim() || "Anonymous";
         setUsername(name);
@@ -576,19 +582,42 @@ export default function VideoMeetComponent() {
                         </Badge>
                     </div>
 
-                    {/* Self-view pip — always mounted so ref stays attached */}
-                    <div className={styles.meetUserVideo} style={{ padding:0, overflow:'hidden' }}>
-                        <video ref={localVideoref} autoPlay muted style={{ width:'100%', height:'100%', objectFit:'cover', display: video ? 'block' : 'none', borderRadius:0 }} />
-                        {/* Camera off tile */}
-                        {!video && (
-                            <div style={{ width:'100%', height:'100%', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:4, background:'#0d1410' }}>
-                                <span style={{ fontSize:26 }}>🎥</span>
-                                <span style={{ fontSize:10, color:'rgba(255,255,255,0.35)', fontFamily:"'DM Sans',sans-serif" }}>Cam off</span>
-                            </div>
-                        )}
-                        {/* Mic muted overlay badge */}
+                    {/* Self-view pip — position:absolute comes from CSS, relative needed for inner badge */}
+                    <div className={styles.meetUserVideo} style={{ padding:0, overflow:'hidden', position:'absolute' }}>
+                        {/* Always render video so ref stays attached; hide via CSS when cam off */}
+                        <video
+                            ref={localVideoref}
+                            autoPlay
+                            muted
+                            style={{
+                                position:'absolute', inset:0,
+                                width:'100%', height:'100%',
+                                objectFit:'cover',
+                                opacity: video ? 1 : 0,
+                                borderRadius:0
+                            }}
+                        />
+                        {/* Camera off placeholder — sits under the video when cam is on */}
+                        <div style={{
+                            position:'absolute', inset:0,
+                            display:'flex', flexDirection:'column',
+                            alignItems:'center', justifyContent:'center', gap:4,
+                            background:'#0d1410',
+                            opacity: video ? 0 : 1,
+                            transition:'opacity 0.2s'
+                        }}>
+                            <span style={{ fontSize:26 }}>🎥</span>
+                            <span style={{ fontSize:10, color:'rgba(255,255,255,0.35)', fontFamily:"'DM Sans',sans-serif" }}>Cam off</span>
+                        </div>
+                        {/* Mic muted badge — anchored inside this positioned div */}
                         {!audio && (
-                            <div style={{ position:'absolute', top:6, right:6, width:22, height:22, borderRadius:'50%', background:'rgba(239,68,68,0.85)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:11, backdropFilter:'blur(4px)' }}>
+                            <div style={{
+                                position:'absolute', top:6, right:6,
+                                width:22, height:22, borderRadius:'50%',
+                                background:'rgba(239,68,68,0.85)',
+                                display:'flex', alignItems:'center', justifyContent:'center',
+                                fontSize:11, backdropFilter:'blur(4px)', zIndex:2
+                            }}>
                                 🔇
                             </div>
                         )}
