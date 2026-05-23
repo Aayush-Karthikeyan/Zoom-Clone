@@ -53,6 +53,7 @@ export default function VideoMeetComponent() {
     let [askForUsername, setAskForUsername] = useState(true);
 
     let [username, setUsername] = useState(localStorage.getItem("meetUsername") || "");
+    const myUsernameRef = useRef(localStorage.getItem("meetUsername") || "");
 
     const videoRef = useRef([])
 
@@ -418,22 +419,25 @@ export default function VideoMeetComponent() {
     }
 
     const addMessage = (data, sender, socketIdSender) => {
-        // Skip echo of own messages — we add them locally in sendMessage
-        if (socketIdSender === socketIdRef.current) return;
+        // Skip live echo of own messages (we add locally in sendMessage)
+        // But allow replayed history messages even from self — identified by username
+        const isLiveEcho = socketIdSender === socketIdRef.current;
+        if (isLiveEcho) return;
+        const fromMe = sender === myUsernameRef.current;
         setMessages((prevMessages) => [
             ...prevMessages,
-            { sender: sender, data: data, fromMe: false }
+            { sender: sender, data: data, fromMe }
         ]);
-        setNewMessages((prevNewMessages) => prevNewMessages + 1);
+        if (!fromMe) setNewMessages((prevNewMessages) => prevNewMessages + 1);
     };
 
 
 
     let sendMessage = () => {
         if (!message.trim()) return;
-        const displayName = username.trim() || "Anonymous";
+        const displayName = myUsernameRef.current || "Anonymous";
         socketRef.current.emit('chat-message', message, displayName);
-        // Add locally with fromMe:true so we always render it as ours
+        // Add locally — fromMe always true for messages we send
         setMessages(prev => [...prev, { sender: displayName, data: message, fromMe: true }]);
         setMessage("");
     }
@@ -442,6 +446,7 @@ export default function VideoMeetComponent() {
     let connect = () => {
         const name = username.trim() || "Anonymous";
         setUsername(name);
+        myUsernameRef.current = name;
         localStorage.setItem("meetUsername", name);
         setAskForUsername(false);
         getMedia();
