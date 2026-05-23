@@ -346,7 +346,7 @@
   border: 1px solid var(--border);
   background: var(--surface);
   backdrop-filter: blur(20px);
-  cursor: pointer;
+  cursor: default;
   transition: transform 0.25s cubic-bezier(0.16,1,0.3,1),
               box-shadow 0.25s,
               border-color 0.25s;
@@ -354,29 +354,16 @@
   flex-direction: column;
   gap: 20px;
   position: relative;
-  overflow: hidden;
 }
-.action-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(16,185,129,0.08) 0%, transparent 60%);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.action-card:hover::before { opacity: 1; }
 .action-card:hover {
-  transform: translateY(-6px);
-  border-color: rgba(16,185,129,0.4);
-  box-shadow: 0 24px 60px rgba(0,0,0,0.4), 0 0 40px rgba(16,185,129,0.12);
+  transform: translateY(-4px);
+  border-color: rgba(16,185,129,0.3);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.4), 0 0 40px rgba(16,185,129,0.08);
 }
 
 .action-card.join-card:hover {
-  border-color: rgba(245,158,11,0.4);
-  box-shadow: 0 24px 60px rgba(0,0,0,0.4), 0 0 40px rgba(245,158,11,0.12);
-}
-.action-card.join-card::before {
-  background: linear-gradient(135deg, rgba(245,158,11,0.08) 0%, transparent 60%);
+  border-color: rgba(245,158,11,0.3);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.4), 0 0 40px rgba(245,158,11,0.08);
 }
 
 .card-icon-wrap {
