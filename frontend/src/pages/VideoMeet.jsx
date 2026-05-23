@@ -510,8 +510,17 @@ export default function VideoMeetComponent() {
                             </div>
 
                             <div className={styles.chattingArea}>
-                                <TextField value={message} onChange={(e) => setMessage(e.target.value)} id="outlined-basic" label="Enter Your chat" variant="outlined" />
-                                <Button variant='contained' onClick={sendMessage}>Send</Button>
+                                <input
+                                    className="nexus-input"
+                                    style={{ flex:1, padding:'11px 14px', fontSize:'14px', borderRadius:'12px' }}
+                                    placeholder="Type a message…"
+                                    value={message}
+                                    onChange={e => setMessage(e.target.value)}
+                                    onKeyDown={e => e.key === 'Enter' && sendMessage()}
+                                />
+                                <button className="btn-glow" style={{ padding:'11px 18px', fontSize:'13px', borderRadius:'12px', whiteSpace:'nowrap' }} onClick={sendMessage}>
+                                    Send
+                                </button>
                             </div>
 
 
