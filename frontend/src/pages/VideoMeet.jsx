@@ -52,7 +52,7 @@ export default function VideoMeetComponent() {
 
     let [askForUsername, setAskForUsername] = useState(true);
 
-    let [username, setUsername] = useState("");
+    let [username, setUsername] = useState(localStorage.getItem("meetUsername") || "");
 
     const videoRef = useRef([])
 
@@ -440,6 +440,9 @@ export default function VideoMeetComponent() {
 
     
     let connect = () => {
+        const name = username.trim() || "Anonymous";
+        setUsername(name);
+        localStorage.setItem("meetUsername", name);
         setAskForUsername(false);
         getMedia();
     }
