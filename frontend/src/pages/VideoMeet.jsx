@@ -418,11 +418,11 @@ export default function VideoMeetComponent() {
     }
 
     const addMessage = (data, sender, socketIdSender) => {
-        // Skip messages from yourself — we already added them locally in sendMessage
+        // Skip echo of own messages — we add them locally in sendMessage
         if (socketIdSender === socketIdRef.current) return;
         setMessages((prevMessages) => [
             ...prevMessages,
-            { sender: sender, data: data }
+            { sender: sender, data: data, fromMe: false }
         ]);
         setNewMessages((prevNewMessages) => prevNewMessages + 1);
     };
@@ -433,8 +433,8 @@ export default function VideoMeetComponent() {
         if (!message.trim()) return;
         const displayName = username.trim() || "Anonymous";
         socketRef.current.emit('chat-message', message, displayName);
-        // Also add to own messages immediately so sender sees it instantly
-        setMessages(prev => [...prev, { sender: displayName, data: message }]);
+        // Add locally with fromMe:true so we always render it as ours
+        setMessages(prev => [...prev, { sender: displayName, data: message, fromMe: true }]);
         setMessage("");
     }
 
@@ -500,7 +500,7 @@ export default function VideoMeetComponent() {
                             <div className={styles.chattingDisplay}>
 
                                 {messages.length !== 0 ? messages.map((item, index) => {
-                                    const isMe = item.sender === (username.trim() || "Anonymous");
+                                    const isMe = item.fromMe === true;
                                     return (
                                         <div key={index} style={{ display:'flex', flexDirection:'column', alignItems: isMe ? 'flex-end' : 'flex-start' }}>
                                             <span style={{ fontSize:11, fontWeight:700, color: isMe ? 'var(--green2)' : 'var(--amber2)', marginBottom:4, letterSpacing:'0.03em' }}>
