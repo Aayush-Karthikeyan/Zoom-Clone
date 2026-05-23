@@ -555,12 +555,19 @@ export default function VideoMeetComponent() {
                     </div>
 
                     {/* Self-view pip — always mounted so ref stays attached */}
-                    <div className={styles.meetUserVideo} style={{ padding: 0, overflow: 'hidden' }}>
-                        <video ref={localVideoref} autoPlay muted style={{ width:'100%', height:'100%', objectFit:'cover', display: video ? 'block' : 'none', borderRadius: 0 }} />
+                    <div className={styles.meetUserVideo} style={{ padding:0, overflow:'hidden' }}>
+                        <video ref={localVideoref} autoPlay muted style={{ width:'100%', height:'100%', objectFit:'cover', display: video ? 'block' : 'none', borderRadius:0 }} />
+                        {/* Camera off tile */}
                         {!video && (
-                            <div style={{ width:'100%', height:'100%', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:6, background:'#0d1410' }}>
-                                <span style={{ fontSize:28 }}>🎥</span>
-                                <span style={{ fontSize:11, color:'rgba(255,255,255,0.4)', fontFamily:"'DM Sans',sans-serif" }}>Camera off</span>
+                            <div style={{ width:'100%', height:'100%', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:4, background:'#0d1410' }}>
+                                <span style={{ fontSize:26 }}>🎥</span>
+                                <span style={{ fontSize:10, color:'rgba(255,255,255,0.35)', fontFamily:"'DM Sans',sans-serif" }}>Cam off</span>
+                            </div>
+                        )}
+                        {/* Mic muted overlay badge */}
+                        {!audio && (
+                            <div style={{ position:'absolute', top:6, right:6, width:22, height:22, borderRadius:'50%', background:'rgba(239,68,68,0.85)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:11, backdropFilter:'blur(4px)' }}>
+                                🔇
                             </div>
                         )}
                     </div>

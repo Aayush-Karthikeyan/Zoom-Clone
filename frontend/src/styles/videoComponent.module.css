@@ -117,6 +117,7 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    overflow: hidden;
 }
 
 .chatContainer h1 {
@@ -136,6 +137,7 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+    min-height: 0; /* critical — lets flex child scroll instead of expanding */
 }
 
 .chattingDisplay::-webkit-scrollbar { width: 4px; }
@@ -167,6 +169,8 @@
     align-items: center;
     padding: 14px 16px;
     border-top: 1px solid rgba(16,185,129,0.12);
+    flex-shrink: 0; /* never compress — always stays visible */
+    background: rgba(8,14,10,0.97);
 }
 
 .chattingArea > div { flex: 1; }
