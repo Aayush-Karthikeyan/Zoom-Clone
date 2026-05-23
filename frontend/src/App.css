@@ -15,7 +15,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 20px 48px;
-  background: rgba(5,5,15,0.6);
+  background: rgba(8,12,10,0.6);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
@@ -25,7 +25,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Clash Display', sans-serif;
   font-size: 1.5rem;
   font-weight: 800;
   letter-spacing: -0.02em;
@@ -37,12 +37,12 @@
   width: 36px;
   height: 36px;
   border-radius: 10px;
-  background: linear-gradient(135deg, var(--purple), var(--blue));
+  background: linear-gradient(135deg, var(--green), var(--amber));
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 18px;
-  box-shadow: 0 0 20px rgba(124,58,237,0.5);
+  box-shadow: 0 0 20px rgba(16,185,129,0.5);
 }
 
 .landing-nav-links {
@@ -55,7 +55,7 @@
   background: none;
   border: none;
   color: var(--muted);
-  font-family: 'Inter', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -87,20 +87,20 @@
   gap: 8px;
   padding: 6px 14px;
   border-radius: 999px;
-  border: 1px solid rgba(124,58,237,0.35);
-  background: rgba(124,58,237,0.1);
+  border: 1px solid rgba(16,185,129,0.35);
+  background: rgba(16,185,129,0.1);
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--purple2);
+  color: var(--green2);
   margin-bottom: 28px;
 }
 
 .hero-badge-dot {
   width: 6px; height: 6px;
   border-radius: 50%;
-  background: var(--purple2);
+  background: var(--green2);
   animation: pulse 2s infinite;
 }
 
@@ -110,7 +110,7 @@
 }
 
 .hero-h1 {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Clash Display', sans-serif;
   font-size: clamp(3rem, 5vw, 5rem);
   font-weight: 800;
   line-height: 1.08;
@@ -146,10 +146,10 @@
   max-width: 480px;
   border-radius: 24px;
   border: 1px solid var(--border);
-  background: rgba(13,13,31,0.8);
+  background: rgba(8,14,11,0.8);
   backdrop-filter: blur(20px);
   overflow: hidden;
-  box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 60px rgba(124,58,237,0.15);
+  box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 60px rgba(16,185,129,0.15);
   animation: floatCard 6s ease-in-out infinite;
 }
 
@@ -180,8 +180,8 @@
 
 .mock-tile {
   border-radius: 14px;
-  background: rgba(124,58,237,0.12);
-  border: 1px solid rgba(124,58,237,0.2);
+  background: rgba(16,185,129,0.12);
+  border: 1px solid rgba(16,185,129,0.2);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -192,7 +192,7 @@
   color: var(--muted);
   font-weight: 500;
 }
-.mock-tile:nth-child(1) { background: rgba(37,99,235,0.12); border-color: rgba(37,99,235,0.2); }
+.mock-tile:nth-child(1) { background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.2); }
 .mock-tile:nth-child(3) { background: rgba(236,72,153,0.1); border-color: rgba(236,72,153,0.2); }
 
 .mock-avatar {
@@ -273,7 +273,7 @@
   justify-content: space-between;
   padding: 20px 48px;
   border-bottom: 1px solid var(--border);
-  background: rgba(5,5,15,0.8);
+  background: rgba(8,12,10,0.8);
   backdrop-filter: blur(16px);
   position: sticky;
   top: 0;
@@ -316,7 +316,7 @@
 }
 
 .home-greeting h1 {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Clash Display', sans-serif;
   font-size: clamp(2rem, 3.5vw, 3rem);
   font-weight: 800;
   letter-spacing: -0.03em;
@@ -360,23 +360,23 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(124,58,237,0.08) 0%, transparent 60%);
+  background: linear-gradient(135deg, rgba(16,185,129,0.08) 0%, transparent 60%);
   opacity: 0;
   transition: opacity 0.3s;
 }
 .action-card:hover::before { opacity: 1; }
 .action-card:hover {
   transform: translateY(-6px);
-  border-color: rgba(124,58,237,0.4);
-  box-shadow: 0 24px 60px rgba(0,0,0,0.4), 0 0 40px rgba(124,58,237,0.12);
+  border-color: rgba(16,185,129,0.4);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.4), 0 0 40px rgba(16,185,129,0.12);
 }
 
 .action-card.join-card:hover {
-  border-color: rgba(37,99,235,0.4);
-  box-shadow: 0 24px 60px rgba(0,0,0,0.4), 0 0 40px rgba(37,99,235,0.12);
+  border-color: rgba(245,158,11,0.4);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.4), 0 0 40px rgba(245,158,11,0.12);
 }
 .action-card.join-card::before {
-  background: linear-gradient(135deg, rgba(37,99,235,0.08) 0%, transparent 60%);
+  background: linear-gradient(135deg, rgba(245,158,11,0.08) 0%, transparent 60%);
 }
 
 .card-icon-wrap {
@@ -387,11 +387,13 @@
   justify-content: center;
   font-size: 24px;
 }
-.card-icon-wrap.purple { background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.25); }
-.card-icon-wrap.blue   { background: rgba(37,99,235,0.15);  border: 1px solid rgba(37,99,235,0.25); }
+.card-icon-wrap.purple { background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.25); }
+.card-icon-wrap.blue   { background: rgba(245,158,11,0.15);  border: 1px solid rgba(245,158,11,0.25); }
+.card-icon-wrap.green  { background: rgba(16,185,129,0.15);  border: 1px solid rgba(16,185,129,0.25); }
+.card-icon-wrap.amber  { background: rgba(245,158,11,0.15);  border: 1px solid rgba(245,158,11,0.25); }
 
 .action-card h3 {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Clash Display', sans-serif;
   font-size: 1.4rem;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -415,15 +417,15 @@
   border: 1px solid var(--border);
   background: rgba(255,255,255,0.04);
   color: var(--text);
-  font-family: 'Inter', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 .nexus-input::placeholder { color: var(--muted); }
 .nexus-input:focus {
-  border-color: rgba(124,58,237,0.5);
-  box-shadow: 0 0 0 3px rgba(124,58,237,0.12);
+  border-color: rgba(16,185,129,0.5);
+  box-shadow: 0 0 0 3px rgba(16,185,129,0.12);
 }
 
 .btn-small {
@@ -431,10 +433,10 @@
   border-radius: 12px;
   border: none;
   cursor: pointer;
-  font-family: 'Inter', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
-  background: linear-gradient(135deg, var(--purple), var(--blue));
+  background: linear-gradient(135deg, var(--green), var(--amber));
   color: #fff;
   white-space: nowrap;
   transition: opacity 0.2s, transform 0.2s;
@@ -458,13 +460,13 @@
   padding: 48px 40px;
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
-  background: rgba(13,13,31,0.85);
+  background: rgba(8,14,11,0.85);
   backdrop-filter: blur(24px);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 28px;
-  box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 60px rgba(124,58,237,0.1);
+  box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 60px rgba(16,185,129,0.1);
   z-index: 1;
 }
 
@@ -483,7 +485,7 @@
 }
 
 .lobby-card h2 {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Clash Display', sans-serif;
   font-size: 1.6rem;
   font-weight: 800;
   letter-spacing: -0.03em;
@@ -519,7 +521,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Clash Display', sans-serif;
   font-size: 1.8rem;
   font-weight: 800;
   letter-spacing: -0.02em;
@@ -529,7 +531,7 @@
 }
 
 .auth-tagline {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Clash Display', sans-serif;
   font-size: clamp(2rem, 3.5vw, 3.2rem);
   font-weight: 800;
   line-height: 1.1;
@@ -562,7 +564,7 @@
 }
 
 .auth-form-wrap h2 {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Clash Display', sans-serif;
   font-size: 1.9rem;
   font-weight: 800;
   letter-spacing: -0.03em;
@@ -592,16 +594,16 @@
   border: none;
   background: transparent;
   color: var(--muted);
-  font-family: 'Inter', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
 }
 .tab-btn.active {
-  background: linear-gradient(135deg, var(--purple), var(--blue));
+  background: linear-gradient(135deg, var(--green), var(--amber));
   color: #fff;
-  box-shadow: 0 2px 12px rgba(124,58,237,0.35);
+  box-shadow: 0 2px 12px rgba(16,185,129,0.35);
 }
 
 .form-group {
@@ -623,7 +625,7 @@
   border: 1px solid var(--border);
   background: var(--surface);
   color: var(--text);
-  font-family: 'Inter', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
@@ -631,8 +633,8 @@
 }
 .auth-input::placeholder { color: rgba(241,240,255,0.25); }
 .auth-input:focus {
-  border-color: rgba(124,58,237,0.55);
-  box-shadow: 0 0 0 3px rgba(124,58,237,0.12);
+  border-color: rgba(16,185,129,0.55);
+  box-shadow: 0 0 0 3px rgba(16,185,129,0.12);
 }
 
 .auth-error {
@@ -651,21 +653,49 @@
   border-radius: 12px;
   border: none;
   cursor: pointer;
-  font-family: 'Inter', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 15px;
   font-weight: 700;
-  background: linear-gradient(135deg, var(--purple) 0%, var(--blue) 100%);
+  background: linear-gradient(135deg, var(--green) 0%, var(--amber) 100%);
   color: #fff;
-  box-shadow: 0 0 30px rgba(124,58,237,0.35);
+  box-shadow: 0 0 30px rgba(16,185,129,0.35);
   transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
   margin-top: 8px;
   letter-spacing: 0.02em;
 }
 .auth-submit:hover {
   transform: translateY(-2px);
-  box-shadow: 0 0 50px rgba(124,58,237,0.55);
+  box-shadow: 0 0 50px rgba(16,185,129,0.55);
 }
 .auth-submit:active { transform: scale(0.98); }
+
+/* ─── CURSOR SPOTLIGHT ──────────────────────────────── */
+.home-page {
+  --x: 50%;
+  --y: 50%;
+}
+
+.cursor-spotlight {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(
+    600px circle at var(--x) var(--y),
+    rgba(16,185,129,0.07) 0%,
+    rgba(245,158,11,0.04) 40%,
+    transparent 70%
+  );
+  transition: background 0.1s ease;
+}
+
+/* ─── LOBBY PAGE needs font too ─────────────────────── */
+.lobby-page {
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ─── BTN-SMALL text dark on light grad ─────────────── */
+.btn-small { color: #0a0f0c; }
 
 @media (max-width: 768px) {
   .auth-left { display: none; }

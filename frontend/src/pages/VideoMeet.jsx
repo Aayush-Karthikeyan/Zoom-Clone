@@ -48,7 +48,7 @@ export default function VideoMeetComponent() {
 
     let [message, setMessage] = useState("");
 
-    let [newMessages, setNewMessages] = useState(3);
+    let [newMessages, setNewMessages] = useState(0);
 
     let [askForUsername, setAskForUsername] = useState(true);
 
@@ -65,10 +65,8 @@ export default function VideoMeetComponent() {
     // }
 
     useEffect(() => {
-        console.log("HELLO")
         getPermissions();
-
-    })
+    }, [])  // empty deps — run once only, fixes flicker
 
     let getDislayMedia = () => {
         if (screen) {
@@ -457,7 +455,7 @@ export default function VideoMeetComponent() {
                     <div className="orb orb-blue"   style={{ width: 400, height: 400, bottom: '-100px', right: '-80px' }} />
 
                     <div className="lobby-card glass">
-                        <div style={{ display:'flex', alignItems:'center', gap:10, fontFamily:"'Syne',sans-serif", fontSize:'1.4rem', fontWeight:800, letterSpacing:'-0.02em' }}>
+                        <div style={{ display:'flex', alignItems:'center', gap:10, fontFamily:"'Clash Display',sans-serif", fontSize:'1.4rem', fontWeight:800, letterSpacing:'-0.02em' }}>
                             <div className="logo-icon">⚡</div>
                             Nexus
                         </div>
@@ -467,7 +465,7 @@ export default function VideoMeetComponent() {
                         </div>
 
                         <div style={{ textAlign:'center' }}>
-                            <h2 style={{ fontFamily:"'Syne',sans-serif", fontSize:'1.5rem', fontWeight:800, letterSpacing:'-0.02em', marginBottom:6 }}>Ready to join?</h2>
+                            <h2 style={{ fontFamily:"'Clash Display',sans-serif", fontSize:'1.5rem', fontWeight:800, letterSpacing:'-0.02em', marginBottom:6 }}>Ready to join?</h2>
                             <p style={{ fontSize:'0.9rem', color:'var(--muted)' }}>Enter your display name to continue</p>
                         </div>
 
@@ -535,20 +533,28 @@ export default function VideoMeetComponent() {
                         </IconButton>
 
                         {screenAvailable &&
-                            <IconButton onClick={handleScreen} style={{ color: screen ? "#a855f7" : "#fff", background: screen ? "rgba(168,85,247,0.15)" : "rgba(255,255,255,0.06)", border: `1px solid ${screen ? "rgba(168,85,247,0.4)" : "rgba(255,255,255,0.08)"}`, borderRadius: "16px", width: 52, height: 52 }}>
+                            <IconButton onClick={handleScreen} style={{ color: screen ? "#34d399" : "#fff", background: screen ? "rgba(52,211,153,0.15)" : "rgba(255,255,255,0.06)", border: `1px solid ${screen ? "rgba(52,211,153,0.4)" : "rgba(255,255,255,0.08)"}`, borderRadius: "16px", width: 52, height: 52 }}>
                                 {screen ? <ScreenShareIcon /> : <StopScreenShareIcon />}
                             </IconButton>
                         }
 
-                        <Badge badgeContent={newMessages} max={999} color="secondary">
-                            <IconButton onClick={() => setModal(!showModal)} style={{ color: showModal ? "#60a5fa" : "#fff", background: showModal ? "rgba(37,99,235,0.15)" : "rgba(255,255,255,0.06)", border: `1px solid ${showModal ? "rgba(37,99,235,0.4)" : "rgba(255,255,255,0.08)"}`, borderRadius: "16px", width: 52, height: 52 }}>
+                        <Badge badgeContent={newMessages} max={999} color="success">
+                            <IconButton onClick={() => { setModal(!showModal); setNewMessages(0); }} style={{ color: showModal ? "#34d399" : "#fff", background: showModal ? "rgba(52,211,153,0.15)" : "rgba(255,255,255,0.06)", border: `1px solid ${showModal ? "rgba(52,211,153,0.4)" : "rgba(255,255,255,0.08)"}`, borderRadius: "16px", width: 52, height: 52 }}>
                                 <ChatIcon />
                             </IconButton>
                         </Badge>
                     </div>
 
-
-                    <video className={styles.meetUserVideo} ref={localVideoref} autoPlay muted></video>
+                    {/* Self-view pip — always mounted so ref stays attached */}
+                    <div className={styles.meetUserVideo} style={{ padding: 0, overflow: 'hidden' }}>
+                        <video ref={localVideoref} autoPlay muted style={{ width:'100%', height:'100%', objectFit:'cover', display: video ? 'block' : 'none', borderRadius: 0 }} />
+                        {!video && (
+                            <div style={{ width:'100%', height:'100%', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:6, background:'#0d1410' }}>
+                                <span style={{ fontSize:28 }}>🎥</span>
+                                <span style={{ fontSize:11, color:'rgba(255,255,255,0.4)', fontFamily:"'DM Sans',sans-serif" }}>Camera off</span>
+                            </div>
+                        )}
+                    </div>
 
                     <div className={styles.conferenceView}>
                         {videos.map((video) => (
