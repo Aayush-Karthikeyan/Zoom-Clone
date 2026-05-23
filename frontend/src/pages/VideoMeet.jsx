@@ -85,19 +85,15 @@ export default function VideoMeetComponent() {
             const videoPermission = await navigator.mediaDevices.getUserMedia({ video: true });
             if (videoPermission) {
                 setVideoAvailable(true);
-                console.log('Video permission granted');
             } else {
                 setVideoAvailable(false);
-                console.log('Video permission denied');
             }
 
             const audioPermission = await navigator.mediaDevices.getUserMedia({ audio: true });
             if (audioPermission) {
                 setAudioAvailable(true);
-                console.log('Audio permission granted');
             } else {
                 setAudioAvailable(false);
-                console.log('Audio permission denied');
             }
 
             if (navigator.mediaDevices.getDisplayMedia) {
@@ -123,8 +119,6 @@ export default function VideoMeetComponent() {
     useEffect(() => {
         if (video !== undefined && audio !== undefined) {
             getUserMedia();
-            console.log("SET STATE HAS ", video, audio);
-
         }
 
 
@@ -153,7 +147,6 @@ export default function VideoMeetComponent() {
             connections[id].addStream(window.localStream)
 
             connections[id].createOffer().then((description) => {
-                console.log(description)
                 connections[id].setLocalDescription(description)
                     .then(() => {
                         socketRef.current.emit('signal', id, JSON.stringify({ 'sdp': connections[id].localDescription }))
@@ -208,7 +201,6 @@ export default function VideoMeetComponent() {
 
 
     let getDislayMediaSuccess = (stream) => {
-        console.log("HERE")
         try {
             window.localStream.getTracks().forEach(track => track.stop())
         } catch (e) { console.log(e) }
@@ -278,7 +270,7 @@ export default function VideoMeetComponent() {
         socketRef.current.on('signal', gotMessageFromServer)
 
         socketRef.current.on('connect', () => {
-            socketRef.current.emit('join-call', window.location.href)
+            socketRef.current.emit('join-call', window.location.href, myUsernameRef.current || "Anonymous")
             socketIdRef.current = socketRef.current.id
 
             socketRef.current.on('chat-message', (data, sender, socketIdSender) => {
@@ -289,11 +281,11 @@ export default function VideoMeetComponent() {
                 setVideos((videos) => videos.filter((video) => video.socketId !== id))
             })
 
-            socketRef.current.on('user-joined', (id, clients) => {
+            socketRef.current.on('user-joined', (id, clients, nameMap) => {
                 clients.forEach((socketListId) => {
 
                     connections[socketListId] = new RTCPeerConnection(peerConfigConnections)
-                    // Wait for their ice candidate       
+                    // Wait for their ice candidate
                     connections[socketListId].onicecandidate = function (event) {
                         if (event.candidate != null) {
                             socketRef.current.emit('signal', socketListId, JSON.stringify({ 'ice': event.candidate }))
@@ -302,14 +294,11 @@ export default function VideoMeetComponent() {
 
                     // Wait for their video stream
                     connections[socketListId].onaddstream = (event) => {
-                        console.log("BEFORE:", videoRef.current);
-                        console.log("FINDING ID: ", socketListId);
+                        const participantName = (nameMap && nameMap[socketListId]) || "Anonymous";
 
                         let videoExists = videoRef.current.find(video => video.socketId === socketListId);
 
                         if (videoExists) {
-                            console.log("FOUND EXISTING");
-
                             // Update the stream of the existing video
                             setVideos(videos => {
                                 const updatedVideos = videos.map(video =>
@@ -319,13 +308,13 @@ export default function VideoMeetComponent() {
                                 return updatedVideos;
                             });
                         } else {
-                            // Create a new video
-                            console.log("CREATING NEW");
-                            let newVideo = {
+                            // Create a new video tile with the participant's name
+                            const newVideo = {
                                 socketId: socketListId,
                                 stream: event.stream,
                                 autoplay: true,
-                                playsinline: true
+                                playsinline: true,
+                                username: participantName
                             };
 
                             setVideos(videos => {
@@ -609,7 +598,7 @@ export default function VideoMeetComponent() {
                             <span style={{ fontSize:26 }}>🎥</span>
                             <span style={{ fontSize:10, color:'rgba(255,255,255,0.35)', fontFamily:"'DM Sans',sans-serif" }}>Cam off</span>
                         </div>
-                        {/* Mic muted badge — anchored inside this positioned div */}
+                        {/* Mic muted badge */}
                         {!audio && (
                             <div style={{
                                 position:'absolute', top:6, right:6,
@@ -621,13 +610,30 @@ export default function VideoMeetComponent() {
                                 🔇
                             </div>
                         )}
+                        {/* Your name on pip */}
+                        <div style={{
+                            position:'absolute', bottom:6, left:8,
+                            fontSize:10, fontWeight:600,
+                            color:'rgba(240,250,245,0.85)',
+                            fontFamily:"'DM Sans',sans-serif",
+                            background:'rgba(0,0,0,0.45)',
+                            backdropFilter:'blur(4px)',
+                            borderRadius:5,
+                            padding:'2px 7px',
+                            zIndex:2,
+                            maxWidth:'80%',
+                            overflow:'hidden',
+                            textOverflow:'ellipsis',
+                            whiteSpace:'nowrap'
+                        }}>
+                            {username || "You"}
+                        </div>
                     </div>
 
                     <div className={styles.conferenceView}>
                         {videos.map((video) => (
-                            <div key={video.socketId}>
+                            <div key={video.socketId} style={{ position:'relative', width:'100%', maxWidth:560 }}>
                                 <video
-
                                     data-socket={video.socketId}
                                     ref={ref => {
                                         if (ref && video.stream) {
@@ -635,12 +641,30 @@ export default function VideoMeetComponent() {
                                         }
                                     }}
                                     autoPlay
-                                >
-                                </video>
+                                    style={{ width:'100%', aspectRatio:'16/9', borderRadius:18, objectFit:'cover', background:'#0d1410', display:'block' }}
+                                />
+                                {/* Name badge */}
+                                <div style={{
+                                    position:'absolute', bottom:12, left:12,
+                                    background:'rgba(0,0,0,0.55)',
+                                    backdropFilter:'blur(8px)',
+                                    border:'1px solid rgba(255,255,255,0.1)',
+                                    borderRadius:8,
+                                    padding:'4px 10px',
+                                    fontSize:12,
+                                    fontWeight:600,
+                                    color:'#f0faf5',
+                                    fontFamily:"'DM Sans',sans-serif",
+                                    letterSpacing:'0.01em',
+                                    maxWidth:'70%',
+                                    overflow:'hidden',
+                                    textOverflow:'ellipsis',
+                                    whiteSpace:'nowrap'
+                                }}>
+                                    {video.username || "Anonymous"}
+                                </div>
                             </div>
-
                         ))}
-
                     </div>
 
                 </div>
