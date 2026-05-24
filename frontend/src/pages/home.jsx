@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef, useCallback } from 'react'
+import React, { useContext, useState, useRef, useCallback, useEffect } from 'react'
 import withAuth from '../utils/withAuth'
 import { useNavigate, Link } from 'react-router-dom'
 import "../App.css";
@@ -10,6 +10,27 @@ function HomeComponent() {
     const [copied, setCopied] = useState(false);
     const { addToUserHistory } = useContext(AuthContext);
     const pageRef = useRef(null);
+    const cursorRef = useRef(null);
+    const posRef = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+    const currentRef = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+    const rafRef = useRef(null);
+
+    useEffect(() => {
+        const handleMove = (e) => { posRef.current = { x: e.clientX, y: e.clientY }; };
+        window.addEventListener('mousemove', handleMove);
+        const lerp = (a, b, t) => a + (b - a) * t;
+        const animate = () => {
+            currentRef.current.x = lerp(currentRef.current.x, posRef.current.x, 0.07);
+            currentRef.current.y = lerp(currentRef.current.y, posRef.current.y, 0.07);
+            if (cursorRef.current) {
+                cursorRef.current.style.transform =
+                    `translate(${currentRef.current.x - 200}px, ${currentRef.current.y - 200}px)`;
+            }
+            rafRef.current = requestAnimationFrame(animate);
+        };
+        rafRef.current = requestAnimationFrame(animate);
+        return () => { window.removeEventListener('mousemove', handleMove); cancelAnimationFrame(rafRef.current); };
+    }, []);
 
     const handleMouseMove = useCallback((e) => {
         if (!pageRef.current) return;
@@ -50,7 +71,7 @@ function HomeComponent() {
 
     return (
         <div className="home-page" ref={pageRef} onMouseMove={handleMouseMove}>
-            <div className="cursor-spotlight" />
+            <div ref={cursorRef} className="cursor-glow" />
 
             {/* Navbar */}
             <nav className="home-nav">

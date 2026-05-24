@@ -1,15 +1,44 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import "../App.css"
 import { Link, useNavigate } from 'react-router-dom'
 
 export default function LandingPage() {
     const router = useNavigate();
+    const cursorRef = useRef(null);
+    const posRef = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+    const currentRef = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+    const rafRef = useRef(null);
+
+    useEffect(() => {
+        const handleMove = (e) => {
+            posRef.current = { x: e.clientX, y: e.clientY };
+        };
+        window.addEventListener('mousemove', handleMove);
+
+        const lerp = (a, b, t) => a + (b - a) * t;
+
+        const animate = () => {
+            currentRef.current.x = lerp(currentRef.current.x, posRef.current.x, 0.07);
+            currentRef.current.y = lerp(currentRef.current.y, posRef.current.y, 0.07);
+            if (cursorRef.current) {
+                cursorRef.current.style.transform =
+                    `translate(${currentRef.current.x - 200}px, ${currentRef.current.y - 200}px)`;
+            }
+            rafRef.current = requestAnimationFrame(animate);
+        };
+        rafRef.current = requestAnimationFrame(animate);
+
+        return () => {
+            window.removeEventListener('mousemove', handleMove);
+            cancelAnimationFrame(rafRef.current);
+        };
+    }, []);
 
     return (
         <div className="landing">
-            {/* Acid green glow orb */}
-            <div className="orb orb-green"  style={{ width:700, height:700, bottom:'-200px', right:'-150px', opacity:0.12 }} />
-            <div className="orb orb-purple" style={{ width:400, height:400, top:'-100px', left:'-100px', opacity:0.08 }} />
+
+            {/* Lerp cursor glow */}
+            <div ref={cursorRef} className="cursor-glow" />
 
             {/* Tunnel text background */}
             <div className="tunnel-wrap">
@@ -36,76 +65,55 @@ export default function LandingPage() {
                 </div>
             </nav>
 
-            {/* Hero */}
-            <div className="landing-hero">
-                <div className="hero-left">
-                    <div className="hero-badge fade-up">
-                        <span className="hero-badge-dot" />
-                        Now in beta · Free to use
-                    </div>
-
-                    <h1 className="hero-h1 fade-up-2">
-                        Video calls,<br />
-                        <span className="accent" style={{ color:'#39ff14' }}>reimagined.</span>
-                    </h1>
-
-                    <p className="hero-sub fade-up-3">
-                        Crystal-clear peer-to-peer video meetings with real-time collaboration.
-                        No downloads. No friction. Just connect.
-                    </p>
-
-                    <div className="hero-cta fade-up-4">
-                        <Link to="/auth" className="btn-glow">Start for free →</Link>
-                        <button className="btn-ghost" onClick={() => router("/aljk23")}>Join as guest</button>
-                    </div>
+            {/* Full width editorial hero — no card */}
+            <div className="landing-hero-full">
+                <div className="hero-badge fade-up">
+                    <span className="hero-badge-dot" />
+                    Now in beta · Free to use
                 </div>
 
-                <div className="hero-right fade-up-2">
-                    <div className="mock-card">
-                        <div className="mock-top-bar">
-                            <div className="mock-dot" />
-                            <div className="mock-dot" />
-                            <div className="mock-dot" />
-                            <span className="mock-title">⚡ Nexus · Meeting in progress</span>
+                <h1 className="hero-h1-full fade-up-2">
+                    Video calls,<br />
+                    <span style={{ color:'#39ff14', WebkitTextStroke:'0px' }}>reimagined.</span>
+                </h1>
+
+                <p className="hero-sub-full fade-up-3">
+                    Peer-to-peer video meetings. Real-time collaboration.<br />
+                    No downloads. No friction. Just connect.
+                </p>
+
+                <div className="hero-cta fade-up-4">
+                    <Link to="/auth" className="btn-glow">Start for free →</Link>
+                    <button className="btn-ghost" onClick={() => router("/aljk23")}>Join as guest</button>
+                </div>
+
+                {/* Stats row */}
+                <div className="hero-stats fade-up-4">
+                    {[
+                        { val: 'P2P', label: 'WebRTC direct' },
+                        { val: '<50ms', label: 'Latency' },
+                        { val: '∞', label: 'Free forever' },
+                    ].map((s, i) => (
+                        <div className="hero-stat" key={i}>
+                            <span className="hero-stat-val">{s.val}</span>
+                            <span className="hero-stat-label">{s.label}</span>
                         </div>
-                        <div className="mock-body">
-                            {[
-                                { emoji: '🧑‍💻', label: 'Aayush' },
-                                { emoji: '👩‍🎨', label: 'Sara' },
-                                { emoji: '🧑‍🚀', label: 'Dev' },
-                                { emoji: '👨‍🔬', label: 'Raj' },
-                            ].map((p, i) => (
-                                <div className="mock-tile" key={i}>
-                                    <div className="mock-avatar">{p.emoji}</div>
-                                    <span>{p.label}</span>
-                                </div>
-                            ))}
-                        </div>
-                        <div className="mock-controls">
-                            <div className="mock-btn">🎤</div>
-                            <div className="mock-btn">📷</div>
-                            <div className="mock-btn end">📵</div>
-                            <div className="mock-btn">💬</div>
-                            <div className="mock-btn">🖥️</div>
-                        </div>
-                    </div>
+                    ))}
                 </div>
             </div>
 
-            {/* Features strip */}
-            <div className="landing-features">
-                {[
-                    { icon: '🔒', label: 'End-to-end encrypted' },
-                    { icon: '⚡', label: 'Ultra-low latency' },
-                    { icon: '🌍', label: 'Works anywhere' },
-                    { icon: '💬', label: 'Built-in live chat' },
-                    { icon: '🖥️', label: 'Screen sharing' },
-                ].map((f, i) => (
-                    <div className="feature-item" key={i}>
-                        <div className="feature-icon">{f.icon}</div>
-                        {f.label}
-                    </div>
-                ))}
+            {/* Marquee strip */}
+            <div className="marquee-wrap">
+                <div className="marquee-track">
+                    {[...Array(3)].map((_, i) => (
+                        <span className="marquee-content" key={i}>
+                            VIDEO CALLS &nbsp;·&nbsp; SCREEN SHARE &nbsp;·&nbsp;
+                            LIVE CHAT &nbsp;·&nbsp; PEER TO PEER &nbsp;·&nbsp;
+                            WEBRTC &nbsp;·&nbsp; NEXUS &nbsp;·&nbsp;
+                            NO DOWNLOADS &nbsp;·&nbsp; OPEN SOURCE &nbsp;·&nbsp;&nbsp;
+                        </span>
+                    ))}
+                </div>
             </div>
         </div>
     )
