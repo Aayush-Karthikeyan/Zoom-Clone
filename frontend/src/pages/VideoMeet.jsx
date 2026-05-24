@@ -66,7 +66,7 @@ export default function VideoMeetComponent() {
 
     useEffect(() => {
         getPermissions();
-    }, [])  // empty deps — run once only, fixes flicker
+    }, [])  // eslint-disable-line react-hooks/exhaustive-deps
 
     let getDislayMedia = () => {
         if (screen) {
@@ -121,7 +121,7 @@ export default function VideoMeetComponent() {
         }
 
 
-    }, [video, audio])
+    }, [video, audio])  // eslint-disable-line react-hooks/exhaustive-deps
     let getMedia = () => {
         setVideo(videoAvailable);
         setAudio(audioAvailable);
@@ -384,7 +384,7 @@ export default function VideoMeetComponent() {
         if (screen !== undefined) {
             getDislayMedia();
         }
-    }, [screen])
+    }, [screen])  // eslint-disable-line react-hooks/exhaustive-deps
     let handleScreen = () => {
         setScreen(!screen);
     }

@@ -16,7 +16,7 @@ export default function History() {
             } catch {}
         }
         fetchHistory();
-    }, [])
+    }, [])  // eslint-disable-line react-hooks/exhaustive-deps
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
